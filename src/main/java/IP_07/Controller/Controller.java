@@ -15,15 +15,18 @@ public class Controller {
     private ControllerTasks controllerTasks;
     private PopUpsBuilder popUpsBuilder;
     private Register register;
+    private MySQLController mySQLController;
 
     /**
-     * Constructor of a ready to work with controller containing dependent controllers, popUpsBuilder and register for data
+     * Constructor of a ready to work with controller containing dependent controllers, popUpsBuilder,
+     * register for data and controller for database
      */
     public Controller() {
         this.setControllerProjects(new ControllerProjects());
         this.setControllerTasks(new ControllerTasks());
         this.setPopUpsBuilder(new PopUpsBuilder());
         this.setRegister(new Register());
+        this.setMySQLController(new MySQLController());
     }
 
     /**
@@ -33,6 +36,7 @@ public class Controller {
     public ControllerTasks getControllerTasks() { return controllerTasks; }
     public PopUpsBuilder getPopUpsBuilder() { return popUpsBuilder; }
     public Register getRegister() { return register; }
+    public MySQLController getMySQLController() { return mySQLController; }
 
     /**
      * Setters for this class
@@ -41,6 +45,7 @@ public class Controller {
     public void setControllerTasks(ControllerTasks controllerTasks) { this.controllerTasks = controllerTasks; }
     public void setPopUpsBuilder(PopUpsBuilder popUpsBuilder) { this.popUpsBuilder = popUpsBuilder; }
     public void setRegister(Register register) { this.register = register; }
+    public void setMySQLController(MySQLController mySQLController) { this.mySQLController = mySQLController; }
 
     /* =================    =================    Methods    =================   ================= */
 
@@ -83,16 +88,18 @@ public class Controller {
      * Uploading data from MySQL database into lists stored in the register
      */
     private void uploadData() {
-        MySQLController dataReader = new MySQLController();
-        DataLists dataLists = dataReader.readData();                    // Retrieve data in DataLists format
-                                                                        // And populate registers lists
+        DataLists dataLists = getMySQLController().readData();                          // Retrieve data in DataLists format
+                                                                                        // And populate registers lists
         getRegister().setTasks(dataLists.getTasks());
         getRegister().getTasks().forEach(task -> getRegister().getTasksIds().add(task.getId()));
         getRegister().setProjects(dataLists.getProjects());
         getRegister().getProjects().forEach(project -> getRegister().getProjectsIds().add(project.getId()));
-                                                                        // Create tasks assignations in projects
+                                                                                        // Create tasks assignations in projects
         getRegister().getTasks().stream().filter(task -> !task.getAssignedToProject().equals(""))
-                .forEach(task -> getRegister().addTaskToProject(task.getId(), task.getAssignedToProject()));
+                .forEach(task -> {
+                    getRegister().addTaskToProject(task.getId(), task.getAssignedToProject());          // In register
+                    getMySQLController().addTaskToProject(task.getId(), task.getAssignedToProject());   // In database
+                });
     }
 
     /**

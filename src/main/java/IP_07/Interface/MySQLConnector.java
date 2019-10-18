@@ -30,7 +30,8 @@ public class MySQLConnector {
 
         try {
         //    Class.forName(DRIVER).newInstance();                // Dina says it is not working anyway
-            conn = DriverManager.getConnection(URL + DB_NAME + "?user=" + USER_NAME + "&password=" + PASSWORD);
+        //    conn = DriverManager.getConnection(URL + DB_NAME + "?user=" + USER_NAME + "&password=" + PASSWORD);
+            conn = DriverManager.getConnection(URL + DB_NAME, USER_NAME, PASSWORD);
             return conn;                                        // Return connection to work with
         } catch (Exception e) {
             System.out.println("NO CONNECTION =(");

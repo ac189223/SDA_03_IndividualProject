@@ -1,5 +1,6 @@
 package IP_07.Controller;
 
+import IP_07.Interface.MySQLController;
 import IP_07.Model.Project;
 import IP_07.Model.Register;
 
@@ -16,25 +17,27 @@ import java.util.stream.Collectors;
  */
 public class ControllerProjects {
     private PopUpsBuilderProjects popUpsBuilderProjects;
+    private MySQLController mySQLController;
 
     /**
      * Constructor of a ready to work with controller containing popUpsBuilder
      */
     public ControllerProjects() {
         this.setPopUpsBuilderProjects(new PopUpsBuilderProjects());
+        this.setMySQLController(new MySQLController());
     }
 
     /**
      * Getter for this class
      */
     public PopUpsBuilderProjects getPopUpsBuilderProjects() { return popUpsBuilderProjects; }
+    public MySQLController getMySQLController() { return mySQLController; }
 
     /**
      * Setter for this class
      */
-    public void setPopUpsBuilderProjects(PopUpsBuilderProjects popUpsBuilderProjects) {
-        this.popUpsBuilderProjects = popUpsBuilderProjects;
-    }
+    public void setPopUpsBuilderProjects(PopUpsBuilderProjects popUpsBuilderProjects) { this.popUpsBuilderProjects = popUpsBuilderProjects; }
+    public void setMySQLController(MySQLController mySQLController) { this.mySQLController = mySQLController; }
 
     /* =================    =================    Methods for projects    =================   ================= */
 
@@ -243,8 +246,8 @@ public class ControllerProjects {
     private void addTaskToTheProject(Register register, String chosenProject, String chosenTaskToAddToProject) {
         if (!register.findTask(chosenTaskToAddToProject).getAssignedToProject().equals(chosenProject)) {
                                                                                         // Assign task if it was not assigned
-            register.findTask(chosenTaskToAddToProject).setAssignedToProject(chosenProject);                      // Mark in task
-            register.addTaskToProject(chosenTaskToAddToProject, chosenProject);                                   // List in project
+            register.addTaskToProject(chosenTaskToAddToProject, chosenProject);                                   // In register
+            getMySQLController().addTaskToProject(chosenTaskToAddToProject, chosenProject);                       // In database
             getPopUpsBuilderProjects().addedTaskToProjectConfirmation(chosenTaskToAddToProject, chosenProject);   // Confirm
         } else {                                                                        // Inform that it was assigned
             getPopUpsBuilderProjects().taskAlreadyInProjectInformation(chosenTaskToAddToProject, chosenProject);
@@ -324,6 +327,10 @@ public class ControllerProjects {
         String newTitle = enterNewTitleForProject();                                    // Get title
         String newDueDate = enterNewDueDateForProject();                                // Get due date
         register.addProject(new Project(newTitle, newDueDate));                         // Add new project to register
+                                                                                        // Add new project to database
+        Project addedProject = register.getProjects().get(register.getProjects().size() - 1);
+        getMySQLController().addNewProject(addedProject.getId(), addedProject.getTitle(), addedProject.getDueDate());
+
         getPopUpsBuilderProjects().addedNewProjectConfirmation(register);               // Print confirmation
     }
 

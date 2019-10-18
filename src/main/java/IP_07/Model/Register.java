@@ -55,11 +55,11 @@ public class Register {
      * @param listOfIds         list of ids that exist till now
      * @return                  random, unique it
      */
-    private String randomId(ArrayList<String> listOfIds) {
+    public String randomId(ArrayList<String> listOfIds) {
         Random random = new Random();
         String tempId = String.format("%03d", random.nextInt(1000));        // Create new Id
         if (listOfIds.size() != 0)
-            while (listOfIds.contains(tempId))                                     // Check if it is unique
+            while (listOfIds.toString().contains(tempId))                          // Check if it is unique
                 tempId = String.format("%03d", random.nextInt(1000));       // Create next one if not unique
         return tempId;
     }
@@ -72,7 +72,6 @@ public class Register {
      */
     public void addTaskToProject(String taskId, String projectId) {
         findTask(taskId).setAssignedToProject(projectId);                       // Set project assignation in task in register
-        getMySQLController().addTaskToProject(taskId, projectId);               // Set project assignation in task in database
         findProject(projectId).getAssignedTasks().add(taskId);                  // List task in project as assigned
     }
 
@@ -86,8 +85,6 @@ public class Register {
                                                                                 // Remove it from the list in project
             findProject(findTask(taskId).getAssignedToProject()).getAssignedTasks().remove(taskId);
             findTask(taskId).setAssignedToProject("");                          // Remove project assignation in task in register
-                                                                                // Remove project assignation in task in database
-            getMySQLController().setTaskAssignationToNull(taskId, findTask(taskId).getAssignedToProject());
         }
     }
 
@@ -160,11 +157,10 @@ public class Register {
      * @param task              task, that will be added to the list
      */
     public void addTask(Task task) {
-        task.setId("task" + randomId(getTasksIds()));                               // Create unique Id
+        if (task.getId() == null)
+            task.setId("task" + randomId(getProjectsIds()));                        // Create unique Id
         getTasks().add(task);                                                       // Add task to the register
         getTasksIds().add(task.getId());                                            // Add task Id to the list
-                                                                                    // Add new task to database
-        getMySQLController().addNewTask(task.getId(), task.getTitle(), task.getDueDate());
     }
 
     /**
@@ -251,11 +247,10 @@ public class Register {
      */
     // Adding new project to the list
     public void addProject(Project project) {
-        project.setId("proj" + randomId(getProjectsIds()));                         // Create unique Id
+        if (project.getId() == null)
+            project.setId("proj" + randomId(getProjectsIds()));                     // Create unique Id
         getProjects().add(project);                                                 // Add project to the register
         getProjectsIds().add(project.getId());                                      // Add project Id to the list
-                                                                                    // Add new project to database
-        getMySQLController().addNewProject(project.getId(), project.getTitle(), project.getDueDate());
     }
 
     /**
