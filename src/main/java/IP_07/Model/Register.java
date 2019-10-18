@@ -154,7 +154,7 @@ public class Register {
      */
     public void addTask(Task task) {
         if (task.getId() == null)
-            task.setId("task" + randomId(getProjectsIds()));                        // Create unique Id
+            task.setId("task" + randomId(getTasksIds()));                           // Create unique Id
         getTasks().add(task);                                                       // Add task to the register
         getTasksIds().add(task.getId());                                            // Add task Id to the list
     }
