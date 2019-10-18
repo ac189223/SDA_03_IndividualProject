@@ -85,6 +85,7 @@ public class Register {
                                                                                 // Remove it from the list in project
             findProject(findTask(taskId).getAssignedToProject()).getAssignedTasks().remove(taskId);
             findTask(taskId).setAssignedToProject("");                          // Remove project assignation in task in register
+            // Remember to remove project assignation in task in database also !!!!
         }
     }
 
@@ -97,8 +98,7 @@ public class Register {
         ArrayList<String> assignedTasks = findProject(projectId).getAssignedTasks();
         while (assignedTasks.size() > 0) {                                      // While there are tasks assigned
             findTask(assignedTasks.get(0)).setAssignedToProject("");            // Remove project assignation in  first task
-                                                                                // Remove it also in database
-            getMySQLController().setTaskAssignationToNull(assignedTasks.get(0), projectId);
+            // Remember to remove project assignation in task in database also !!!!
                                                                                 // Remove first task from the list in project
             findProject(projectId).getAssignedTasks().remove(assignedTasks.get(0));
         }
@@ -209,10 +209,8 @@ public class Register {
     public void setTaskStatus(String chosenTask, int chosenStatus) {
         if (chosenStatus == 0) {
             findTask(chosenTask).setDone(false);                                // Set task as unfinished in register
-            getMySQLController().markTaskAsNotDone(chosenTask);                 // Set task as unfinished in database
         } else if (chosenStatus == 1) {
             findTask(chosenTask).setDone(true);                                 // Set task as finished in register
-            getMySQLController().markProjectAsDone(chosenTask);                 // Set task as finished in database
         }
     }
 
@@ -224,7 +222,6 @@ public class Register {
      */
     public void setTaskDueDate(String chosenTask, String chosenDueDate) {
         findTask(chosenTask).setDueDate(chosenDueDate);                         // Set task due date in register
-        getMySQLController().setTaskDueDate(chosenTask, chosenDueDate);         // Set task due date in database
     }
 
     /**
@@ -235,7 +232,6 @@ public class Register {
      */
     public void setTaskTitle(String chosenTask, String chosenTitle) {
         findTask(chosenTask).setTitle(chosenTitle);                             // Set task title in register
-        getMySQLController().setTaskTitle(chosenTask, chosenTitle);             // Set task title in database
     }
 
     /* =================    =================    Methods for projects    =================   ================= */
@@ -278,7 +274,6 @@ public class Register {
     public void markProjectAsDoneAlways(String id) {
         findProject(id).getAssignedTasks().forEach(this::markTaskAsDone);       // Mark assigned tasks as finished
         findProject(id).setDone(true);                                          // Mark project as finished in register
-        getMySQLController().markProjectAsDone(id);                             // Mark project as finished in database
     }
 
     /**
@@ -302,11 +297,9 @@ public class Register {
     public void removeProjectAlways(String projectId) {
         for (String taskId: findProject(projectId).getAssignedTasks()) {        // For all dependent tasks
             getTasks().remove(findTask(taskId));                                // Remove task from register
-            getMySQLController().removeTask(taskId);                            // Remove task from database
             getTasksIds().remove(taskId);                                       // Remove task Id form list
         }
         getProjects().remove(findProject(projectId));                           // Remove project from register
-        getMySQLController().removeProject(projectId);                          // Remove project from database
         getProjectsIds().remove(projectId);                                     // Remove project Id form list
     }
 
@@ -318,7 +311,7 @@ public class Register {
     public void removeProjectDependent(String projectId) {
         if (findProject(projectId).getAssignedTasks().size() == 0) {            // If there are no dependent tasks
             getProjects().remove(findProject(projectId));                       // Remove project from register
-            getMySQLController().removeProject(projectId);                      // Remove project from database
+            // Remember to remove project from database
             getProjectsIds().remove(projectId);                                 // Remove project Id form list
         } else
             System.out.println("Remove or delete all dependent tasks first");   // Ask to remove tasks first
@@ -346,7 +339,6 @@ public class Register {
      */
     public void setProjectDueDate(String chosenProject, String chosenDueDate) {
         findProject(chosenProject).setDueDate(chosenDueDate);                   // Set project due date in register
-        getMySQLController().setProjectDueDate(chosenProject, chosenDueDate);   // Set project due date in database
     }
 
     /**
@@ -357,6 +349,5 @@ public class Register {
      */
     public void setProjectTitle(String chosenProject, String chosenTitle) {
         findProject(chosenProject).setTitle(chosenTitle);                       // Set project title in register
-        getMySQLController().setProjectTitle(chosenProject, chosenTitle);       // Set project title in database
     }
 }

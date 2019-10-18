@@ -130,7 +130,8 @@ public class ControllerTasks {
      * @param chosenTask        Id of the task, that will be removed
      */
     private void removeTaskChosen(Register register, String chosenTask) {
-        register.removeTask(chosenTask);                                                // Remove task
+        register.removeTask(chosenTask);                                                // Remove task from register
+        getMySQLController().removeTask(chosenTask);                                    // Remove task from database (set removal date)
         getPopUpsBuilderTasks().taskRemovalConfirmation();                              // Print confirmation
     }
 
@@ -141,7 +142,8 @@ public class ControllerTasks {
      * @param chosenTask        Id of the task, that will be removed
      */
     private void markTaskAsDone(Register register, String chosenTask) {
-        register.markTaskAsDone(chosenTask);                                            // Mark project as done
+        register.markTaskAsDone(chosenTask);                                            // Mark task as finished in register
+        getMySQLController().markTaskAsDone(chosenTask);                                // Mark task as finished in database
         getPopUpsBuilderTasks().taskMarkedAsDoneConfirmation();                         // Print confirmation
     }
 
@@ -183,8 +185,12 @@ public class ControllerTasks {
      */
     private void changeTaskStatus(Register register, String chosenTask) {
         int chosenStatus = chooseTaskStatus();                                  // Choose new status
-        register.setTaskStatus(chosenTask, chosenStatus);                       // Change status of chosen task
-        getPopUpsBuilderTasks().fixTaskStatusConfirmation();                    // Print confirmation
+        register.setTaskStatus(chosenTask, chosenStatus);                       // Change status of chosen task in register
+        if (chosenStatus == 0) {
+            getMySQLController().markTaskAsNotDone(chosenTask);                 // Set task as unfinished in database
+        } else if (chosenStatus == 1) {
+            getMySQLController().markProjectAsDone(chosenTask);                 // Set task as finished in database
+        }getPopUpsBuilderTasks().fixTaskStatusConfirmation();                    // Print confirmation
     }
 
     /**
@@ -263,7 +269,8 @@ public class ControllerTasks {
             } while (chosenDueDate.equals(""));
         } while (!dateValidator.isThisDateValid(chosenDueDate, "yyyyMMdd"));     // Check if date is valid
 
-        register.setTaskDueDate(chosenTask, chosenDueDate);                                 // Change due date of chosen task
+        register.setTaskDueDate(chosenTask, chosenDueDate);                                 // Change due date of chosen task in register
+        getMySQLController().setTaskDueDate(chosenTask, chosenDueDate);                     // Set task due date in database
         getPopUpsBuilderTasks().changeTaskDueDateConfirmation();                            // Print confirmation
     }
 
@@ -275,7 +282,8 @@ public class ControllerTasks {
      */
     private void changeTaskTitle(Register register, String chosenTask) {
         String chosenTitle = chooseNewTitleForTask();                               // Get new title
-        register.setTaskTitle(chosenTask, chosenTitle);                             // Change title of chosen task
+        register.setTaskTitle(chosenTask, chosenTitle);                             // Change title of chosen task in register
+        getMySQLController().setTaskTitle(chosenTask, chosenTitle);                 // Set task title in database
         getPopUpsBuilderTasks().changedTaskTitleConfirmation();                     // Print confirmation
     }
 

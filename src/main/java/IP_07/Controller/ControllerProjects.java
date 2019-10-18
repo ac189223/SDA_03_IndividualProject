@@ -88,7 +88,7 @@ public class ControllerProjects {
                     removeProjectChosen(register, chosenProject);
                     break;
                 case 2:                                                     // Mark project as done
-                    markProjectAsDone(register, chosenProject);
+                    markProjectAsDoneAlways(register, chosenProject);
                     break;
                 case 3:                                                     // Edit one of fields of chosen project
                     chooseProjectFieldToEdit(register, chosenProject);
@@ -132,18 +132,25 @@ public class ControllerProjects {
      * @param chosenProject     project, that will be removed
      */
     private void removeProjectChosen(Register register, String chosenProject) {
-        register.removeProjectAlways(chosenProject);                                    // Remove project
+        register.removeProjectAlways(chosenProject);                                    // Remove project and dependent tasks from register
+        for (String taskId: register.findProject(chosenProject).getAssignedTasks()) {   // For all dependent tasks
+            getMySQLController().removeTask(taskId);                                    // Remove task from database
+        }
+        getMySQLController().removeProject(chosenProject);                              // Remove project from database
         getPopUpsBuilderProjects().projectRemovalConfirmation();                        // Print confirmation
     }
 
     /**
-     * Marking project as finished
+     * Marking project and all dependent tasks as finished
      *
      * @param register          register with tasks and projects
      * @param chosenProject     Id of the project, that will be removed
      */
-    private void markProjectAsDone(Register register, String chosenProject) {
-        register.markProjectAsDoneAlways(chosenProject);                                // Mark project as done
+    private void markProjectAsDoneAlways(Register register, String chosenProject) {
+        register.markProjectAsDoneAlways(chosenProject);                                // Mark project and dependent tasks as done in register
+        register.findProject(chosenProject).getAssignedTasks()
+                .forEach(task -> getMySQLController().markTaskAsDone(task));            // Mark dependent tasks as done in database
+        getMySQLController().markProjectAsDone(chosenProject);                          // Mark project as done in database
         getPopUpsBuilderProjects().projectMarkedAsDoneConfirmation();                   // Print confirmation
     }
 
@@ -185,7 +192,11 @@ public class ControllerProjects {
      */
     private void changeProjectStatus(Register register, String chosenProject) {
         int chosenStatus = chooseProjectStatus();                           // Choose new status
-        register.setProjectStatus(chosenProject, chosenStatus);             // Change status of chosen project
+        register.setProjectStatus(chosenProject, chosenStatus);             // Change status of chosen project in register
+        if (chosenStatus == 0)
+            getMySQLController().markProjectAsNotDone(chosenProject);       // Set project as unfinished in database
+        else
+            getMySQLController().markProjectAsDone(chosenProject);          // Set project as finished in database
         getPopUpsBuilderProjects().fixProjectStatusConfirmation();          // Print confirmation
     }
 
@@ -287,7 +298,8 @@ public class ControllerProjects {
             } while (chosenDueDate.equals(""));
         } while (!dateValidator.isThisDateValid(chosenDueDate, "yyyyMMdd"));     // Check if date is valid
 
-        register.setProjectDueDate(chosenProject, chosenDueDate);                           // Change due date of chosen project
+        register.setProjectDueDate(chosenProject, chosenDueDate);                           // Change due date of chosen project in register
+        getMySQLController().setProjectDueDate(chosenProject, chosenDueDate);               // Set project due date in database
         getPopUpsBuilderProjects().changeProjectDueDateConfirmation();                      // Print confirmation
     }
 
@@ -299,7 +311,8 @@ public class ControllerProjects {
      */
     private void changeProjectTitle(Register register, String chosenProject) {
         String chosenTitle = chooseNewTitleForProject();                                // Get new title
-        register.setProjectTitle(chosenProject, chosenTitle);                           // Change title of chosen project
+        register.setProjectTitle(chosenProject, chosenTitle);                           // Change title of chosen project in register
+        getMySQLController().setProjectTitle(chosenProject, chosenTitle);               // Set project title in database
         getPopUpsBuilderProjects().changedProjectTitleConfirmation();                   // Print confirmation
     }
 
