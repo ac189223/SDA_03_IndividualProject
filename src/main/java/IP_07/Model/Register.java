@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- * Represents a register containing tasks, projects and controller for database
+ * Represents a register containing tasks and projects
  *
  * @author andrzejcalka
  * @author =-_-=
@@ -16,17 +16,15 @@ public class Register {
     private ArrayList<String> tasksIds;
     private ArrayList<Project> projects;
     private ArrayList<String> projectsIds;
-    private MySQLController mySQLController;
 
     /**
-     * Constructor of a ready to work with register containing empty ArrayLists and controller for database
+     * Constructor of a ready to work with register containing empty ArrayLists
      */
     public Register() {
         this.setTasks(new ArrayList<>());
         this.setTasksIds(new ArrayList<>());                            // List of existing Ids speeds up search
         this.setProjects(new ArrayList<>());
         this.setProjectsIds(new ArrayList<>());                         // List of existing Ids speeds up search
-        this.setMySQLController(new MySQLController());                 // Accessor to update database
     }
 
     /**
@@ -36,7 +34,6 @@ public class Register {
     public ArrayList<String> getTasksIds() {return tasksIds; }
     public ArrayList<Project> getProjects() { return projects; }
     public ArrayList<String> getProjectsIds() {return projectsIds; }
-    public MySQLController getMySQLController() { return mySQLController; }
 
     /**
      * Setters for this class
@@ -45,7 +42,6 @@ public class Register {
     public void setTasksIds(ArrayList<String> tasksIds) { this.tasksIds = tasksIds; }
     public void setProjects(ArrayList<Project> projects) { this.projects = projects; }
     public void setProjectsIds(ArrayList<String> projectsIds) { this.projectsIds = projectsIds; }
-    public void setMySQLController(MySQLController mySQLController) { this.mySQLController = mySQLController; }
 
     /* =================    =================    Methods    =================   ================= */
 
@@ -170,7 +166,6 @@ public class Register {
      */
     public void markTaskAsDone(String id) {
         findTask(id).setDone(true);                                               // Mark task as finished in register
-        getMySQLController().markTaskAsDone(id);                                  // Mark task as finished in register
     }
 
     /**
@@ -196,7 +191,6 @@ public class Register {
                                                                                 // Remove task from the list in project
             findProject(findTask(taskId).getAssignedToProject()).getAssignedTasks().remove(taskId);
         getTasks().remove(findTask(taskId));                                    // Remove task from register
-        getMySQLController().removeTask(taskId);                                // Remove task from database
         getTasksIds().remove(taskId);                                           // Remove task Id form list
     }
 
@@ -324,10 +318,9 @@ public class Register {
      * @param chosenStatus      status, that we will set for above projects (0 for unfinished projects, 1 for finished ones)
      */
     public void setProjectStatus(String chosenProject, int chosenStatus) {
-        if (chosenStatus == 0) {
+        if (chosenStatus == 0)
             findProject(chosenProject).setDone(false);                         // Set project as unfinished in register
-            getMySQLController().markProjectAsNotDone(chosenProject);          // Set project as unfinished in database
-        } else if (chosenStatus == 1)
+        else if (chosenStatus == 1)
             markProjectAsDoneAlways(chosenProject);                             // Set as finished together with dependent tasks
     }
 
