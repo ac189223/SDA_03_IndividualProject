@@ -256,8 +256,7 @@ public class Register {
         }
         if (check)
             findProject(id).setDone(true);                                      // Mark project as finished
-        else
-            System.out.println("Mark all dependent tasks as finished first");   // Ask to correct tasks statuses
+            // Mark all dependent tasks as finished first, correct tasks statuses
     }
 
     /**
@@ -307,8 +306,8 @@ public class Register {
             getProjects().remove(findProject(projectId));                       // Remove project from register
             // Remember to remove project from database
             getProjectsIds().remove(projectId);                                 // Remove project Id form list
-        } else
-            System.out.println("Remove or delete all dependent tasks first");   // Ask to remove tasks first
+        }
+                                                                    // Remove or delete all dependent tasks first
     }
 
     /**
