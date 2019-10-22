@@ -16,7 +16,7 @@ public class Controller {
     private PopUpsBuilder popUpsBuilder;
     private Register register;
     private MySQLController mySQLController;
-
+    private static Controller controller = new Controller();
     /**
      * Constructor of a ready to work with controller containing dependent controllers, popUpsBuilder,
      * register for data and controller for database
@@ -37,6 +37,7 @@ public class Controller {
     public PopUpsBuilder getPopUpsBuilder() { return popUpsBuilder; }
     public Register getRegister() { return register; }
     public MySQLController getMySQLController() { return mySQLController; }
+    public static Controller getController() { return controller; }
 
     /**
      * Setters for this class
@@ -46,19 +47,21 @@ public class Controller {
     public void setPopUpsBuilder(PopUpsBuilder popUpsBuilder) { this.popUpsBuilder = popUpsBuilder; }
     public void setRegister(Register register) { this.register = register; }
     public void setMySQLController(MySQLController mySQLController) { this.mySQLController = mySQLController; }
+    public static void setController(Controller controller) { Controller.controller = controller; }
 
     /* =================    =================    Methods    =================   ================= */
 
     /**
-     * Main method
+     * Main method starting the application
      * Uploading data from MySQL database
      * Presenting first choice to the user (as many times as he wants, until he will select to quit)
      */
-    public void run() {
-        uploadData();                                   // Upload data from MySQL database
-        getRegister().printStatus();                    // Check if successful
+    public static void main(String[] args) {
 
-        while (true) { mainChoice(); }                  // Start with popups and get back to main menu every time
+        getController().uploadData();                                   // Upload data from MySQL database
+        getController().getRegister().printStatus();                    // Check if successful
+
+        while (true) { getController().mainChoice(); }                  // Start with popups and get back to main menu every time
     }
 
     /**

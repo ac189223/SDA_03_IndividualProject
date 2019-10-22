@@ -1,7 +1,5 @@
 package IP_07.View;
 
-import IP_07.Controller.Controller;
-
 import javax.swing.*;
 
 /**
@@ -14,15 +12,6 @@ public class Print {
     private final String TITLE = "ToDoLy    =-_-=";
 
     /* =================    =================    Methods    =================   ================= */
-
-    /**
-     * Main method, that runs the application by starting the main controller
-     * @param args              unused parameter
-     */
-    public static void main(String[] args) {
-        Controller controller = new Controller();
-        controller.run();
-    }
 
     /**
      * Printing popup window with choices and buttons to choose one of them
