@@ -475,30 +475,158 @@ public class RegisterTest {
         assertNull(register.findProject(projectId01));
     }
 
-    /*
+    /**
+     * Test of setting task as finished
+     * Test of setting task as unfinished
+     * Test of changing status of non existing task
+     */
     @Test
     public void setTaskStatus() {
+        // Arrange
+        // Create one task in register
+        Task testTask00 = new Task("testTask00", "20201010");
+        register.addTask(testTask00);
+        String taskId = register.getTasks().get(0).getId();
+        // Act
+        register.setTaskStatus(taskId, 1);
+        // Assert
+        assertTrue(register.getTasks().get(0).ifDone());
+
+        // Act
+        register.setTaskStatus(taskId, 0);
+        // Assert
+        assertFalse(register.getTasks().get(0).ifDone());
+
+        // Act
+        try {
+            register.setTaskStatus("task111", 1);
+            fail("Should throw NullPointerException");
+        } catch (NullPointerException e) {
+        }
     }
 
-    @Test
-    public void setTaskDueDate() {
-    }
-
-    @Test
-    public void setTaskTitle() {
-    }
-
+    /**
+     * Test of setting task as finished
+     * Test of setting task as unfinished
+     * Test of changing status of non existing task
+     */
     @Test
     public void setProjectStatus() {
+        // Arrange
+        // Create one project in register
+        Project testProject00 = new Project("testProject00", "20201010");
+        register.addProject(testProject00);
+        String projectId = register.getProjects().get(0).getId();
+        // Act
+        register.setProjectStatus(projectId, 1);
+        // Assert
+        assertTrue(register.getProjects().get(0).ifDone());
+
+        // Act
+        register.setProjectStatus(projectId, 0);
+        // Assert
+        assertFalse(register.getProjects().get(0).ifDone());
+
+        // Act
+        try {
+            register.setProjectStatus("proj111", 1);
+            fail("Should throw NullPointerException");
+        } catch (NullPointerException e) {
+        }
     }
 
+    /**
+     * Test of setting task due date
+     * Test of changing due date of non existing task
+     */
+    @Test
+    public void setTaskDueDate() {
+        // Arrange
+        // Create one task in register
+        Task testTask00 = new Task("testTask00", "20201010");
+        register.addTask(testTask00);
+        String taskId = register.getTasks().get(0).getId();
+        // Act
+        register.setTaskDueDate(taskId, "20200909");
+        // Assert
+        assertEquals("20200909", register.getTasks().get(0).getDueDate());
+
+        // Act
+        try {
+            register.setTaskDueDate("task111", "20200101");
+            fail("Should throw NullPointerException");
+        } catch (NullPointerException e) {
+        }
+    }
+
+    /**
+     * Test of setting project due date
+     * Test of changing due date of non existing project
+     */
     @Test
     public void setProjectDueDate() {
+        // Arrange
+        // Create one project in register
+        Project testProject00 = new Project("testProject00", "20201010");
+        register.addProject(testProject00);
+        String projectId = register.getProjects().get(0).getId();
+        // Act
+        register.setProjectDueDate(projectId, "20200909");
+        // Assert
+        assertEquals("20200909", register.getProjects().get(0).getDueDate());
+
+        // Act
+        try {
+            register.setProjectDueDate("proj111", "20200202");
+            fail("Should throw NullPointerException");
+        } catch (NullPointerException e) {
+        }
+
     }
 
-    @Test
-    public void setProjectTitle() {
-    }
-
+    /**
+     * Test of setting task title
+     * Test of changing title of non existing task
      */
+    public void setTaskTitle() {
+        // Arrange
+        // Create one task in register
+        Task testTask00 = new Task("testTask00", "20201010");
+        register.addTask(testTask00);
+        String taskId = register.getTasks().get(0).getId();
+        // Act
+        register.setTaskTitle(taskId, "newTitle");
+        // Assert
+        assertEquals("newTitle", register.getTasks().get(0).getTitle());
+
+        // Act
+        try {
+            register.setTaskTitle("task111","newTitle");
+            fail("Should throw NullPointerException");
+        } catch (NullPointerException e) {
+        }
+    }
+
+    /**
+     * Test of setting project title
+     * Test of changing title of non existing project
+     */
+    public void setProjectTitle() {
+        // Arrange
+        // Create one task in register
+        Task testTask00 = new Task("testTask00", "20201010");
+        register.addTask(testTask00);
+        String taskId = register.getTasks().get(0).getId();
+        // Act
+        register.setTaskTitle(taskId, "newTitle");
+        // Assert
+        assertEquals("newTitle", register.getTasks().get(0).getTitle());
+
+        // Act
+        try {
+            register.setTaskTitle("task111","newTitle");
+            fail("Should throw NullPointerException");
+        } catch (NullPointerException e) {
+        }
+    }
 }
