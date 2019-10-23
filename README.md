@@ -32,7 +32,7 @@ The solution must achieve the following requirements
 Implemented according to 
 [UML diagram](https://github.com/ac189223/SDA_03_IndividualProject/blob/ChangesAreComing/src/main/resources/IndividualProject_UML.png)
 within MVC pattern with Interface to establish JDBC connection with local MySQL database named 
-[IP](https://github.com/ac189223/SDA_03_IndividualProject/blob/ChangesAreComing/src/main/resources/IndividualProject_MySQL.pdf).
+[IP](https://github.com/ac189223/SDA_03_IndividualProject/blob/ChangesAreComing/src/main/resources/IndividualProject_MySQL.png).
 * [Model](https://github.com/ac189223/SDA_03_IndividualProject/tree/ChangesAreComing/src/main/java/IP_07/Model)
   * classes to represent task and project used in application
   * register containing list of existing tasks and projects together with applicable methods
