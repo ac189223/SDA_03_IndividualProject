@@ -30,7 +30,7 @@ The solution must achieve the following requirements
 <a name="sol"></a>
 #### Solution
 Implemented according to 
-[UML diagram](https://github.com/ac189223/SDA_03_IndividualProject/blob/ChangesAreComing/src/main/resources/IndividualProject_UML.png)
+[UML diagram](https://github.com/ac189223/SDA_03_IndividualProject/blob/ChangesAreComing/src/main/resources/IndividualProject_UML_miniature.png)
 within MVC pattern with Interface to establish JDBC connection with local MySQL database named 
 [IP](https://github.com/ac189223/SDA_03_IndividualProject/blob/ChangesAreComing/src/main/resources/IndividualProject_MySQL.png).
 * [Model](https://github.com/ac189223/SDA_03_IndividualProject/tree/ChangesAreComing/src/main/java/IP_07/Model)
