@@ -53,3 +53,4 @@ within MVC pattern with Interface to establish JDBC connection with local MySQL 
 * [Resources](https://github.com/ac189223/SDA_03_IndividualProject/tree/ChangesAreComing/src/main/resources)
   * UML diagram of the application
   * diagram of the MySQL database
+  * user manual
