@@ -10,7 +10,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 /**
- * Represents writing operation to provide for the JSON file with data
+ * Represents a data writer used to create the JSON archive file
+ *
+ * @author andrzejcalka
+ * @author =-_-=
  */
 public class JSONController {
     private final String fileName;
