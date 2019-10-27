@@ -54,3 +54,4 @@ within MVC pattern with Interface to establish JDBC connection with local MySQL 
   * UML diagram of the application
   * diagram of the MySQL database
   * user manual
+  * archive files in JSON format
