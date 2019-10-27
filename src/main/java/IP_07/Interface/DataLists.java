@@ -24,6 +24,14 @@ public final class DataLists {
     }
 
     /**
+     * Constructor of a dataList containing provided ArrayLists
+     */
+    public DataLists(ArrayList<Task> tasks, ArrayList<Project> projects) {
+        this.tasks = tasks;
+        this.projects = projects;
+    }
+
+    /**
      * Getters for this class
      */
     public ArrayList<Task> getTasks() { return tasks; }

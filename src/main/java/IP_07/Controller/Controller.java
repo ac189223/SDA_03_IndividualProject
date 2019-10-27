@@ -1,6 +1,7 @@
 package IP_07.Controller;
 
 import IP_07.Interface.DataLists;
+import IP_07.Interface.JSONController;
 import IP_07.Interface.MySQLController;
 import IP_07.Model.Register;
 
@@ -17,6 +18,8 @@ public class Controller {
     private Register register;
     private MySQLController mySQLController;
     private static Controller controller = new Controller();
+    private static JSONController jsonController = new JSONController();
+
     /**
      * Constructor of a ready to work with controller containing dependent controllers, popUpsBuilder,
      * register for data and controller for database
@@ -38,6 +41,7 @@ public class Controller {
     public Register getRegister() { return register; }
     public MySQLController getMySQLController() { return mySQLController; }
     public static Controller getController() { return controller; }
+    public static JSONController getJsonController() { return jsonController; }
 
     /**
      * Setters for this class
@@ -109,6 +113,7 @@ public class Controller {
      * Quiting application with printing good bye message
      */
     private void QuitChosen() {
+        getJsonController().writeDataToJSON(getRegister());             // Save data to JSON
         getPopUpsBuilder().quitConfirmation();                          // Print confirmation
         System.exit(0);                                          // Close application
     }
