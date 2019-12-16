@@ -71,7 +71,7 @@ public class PopUpsBuilder {
      * Preparing popups with information
      */
     public void noProjectsInfo() { getPrint().showMessage(getFrame(), getMessageBuilder().noProjectsInfo()); }
-    public void noTasksInfo() { getPrint().showMessage(getFrame(), getMessageBuilder().noProjectsInfo()); }
+    public void noTasksInfo() { getPrint().showMessage(getFrame(), getMessageBuilder().noTasksInfo()); }
     public void noTasksNoProjectsInfo() { getPrint().showMessage(getFrame(), getMessageBuilder().noTasksNoProjects()); }
 
     /**

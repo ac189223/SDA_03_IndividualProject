@@ -22,8 +22,14 @@ public class Print {
      * @return                  integer pointing on chosen element
      */
     public int showOptionDialog(JFrame frame, String message, Object[] list) {
-        return JOptionPane.showOptionDialog(frame, message, TITLE, JOptionPane.YES_NO_CANCEL_OPTION,
-                JOptionPane.PLAIN_MESSAGE,null, list, list[0]);
+        return JOptionPane.showOptionDialog(frame,
+                message,
+                TITLE,
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                list,
+                list[0]);
     }
 
     /**
